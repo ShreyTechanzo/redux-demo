@@ -1,27 +1,24 @@
 import { Button, Stack, Typography } from "@mui/material";
 import { Link } from "./styles";
 import Modal from "./Modal";
-import { useState } from "react";
+import { useHeader } from "./vm";
 
 
 function Header() {
-    const [dialogOpen, setDialogOpen] = useState(false);
 
-    function handleDialogOpen(bool) {
-        setDialogOpen(bool);
-    }
+    const { isDialogOpen, handleDialogOpen, handleDialogClose } = useHeader();
 
     return (
-        <Stack bgcolor="black" color="blue" direction="row" justifyContent="space-around" alignItems="center">
+        <Stack gap={2} bgcolor="black" color="blue" direction="row" justifyContent="space-around" alignItems="center">
             <Typography variant="h2" my={2} component="h1">Phone-Book</Typography>
             <Stack direction="row" gap={5} fontSize={24}>
                 <Link to="/">Contacts</Link>
                 <Link to="/favorite">Favorite</Link>
             </Stack>
-            <Button onClick={() => setDialogOpen(true)} size="large" variant="outlined">
+            <Button onClick={handleDialogOpen} size="large" variant="outlined">
                 Add Contact
             </Button>
-            <Modal dialogState={dialogOpen} handleDialogState={handleDialogOpen} />
+            <Modal isDialogOpen={isDialogOpen} handleDialogClose={handleDialogClose} />
         </Stack>
     );
 }

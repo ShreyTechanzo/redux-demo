@@ -22,19 +22,18 @@ const formFormat = {
     },
 };
 
-export function useForm(handleDialogState) {
+export function useForm(handleDialogClose) {
     const dispatch = useDispatch();
 
     const [formValue, setFormvalue] = useState(formFormat);
 
-    function handleSubmission(e) {
+    function handleSubmit(e) {
         e.preventDefault();
 
-        //It's Actually not good logic Bcoz its not scalable
         let isError = false;
 
         for (let key in formValue) {
-            if (formValue[key].value) continue;
+            if (formValue[key].value || key === 'eMail') continue;
 
             setFormvalue((prev) => ({
                 ...prev,
@@ -49,27 +48,64 @@ export function useForm(handleDialogState) {
 
         if (isError) return;
 
-        dispatch(addContact({ id: uuid(), name: `${formValue.firstName.value} ${formValue.lastName.value}`, mobileNumber: formValue.mobileNumber.value, eMail: formValue.eMail.value, isFav: false }));
+        const newContact = {
+            id: uuid(),
+            name: `${formValue.firstName.value} ${formValue.lastName.value}`,
+            mobileNumber: formValue.mobileNumber.value,
+            eMail: formValue.eMail.value,
+            isFav: false
+        };
+
+        dispatch(addContact(newContact));
 
         setFormvalue(formFormat);
 
-        handleDialogState(false);
+        handleDialogClose(false);
     }
 
-    function handleChange(e) {
+    function handleFirstNameChange(e) {
         setFormvalue((prev) => ({
             ...prev,
-            [e.target.id]: {
-                ...prev[e.target.id],
+            "firstName": {
+                ...prev["firstName"],
                 value: e.target.value
             },
         }));
-        console.log(e.target.id);
+    }
+
+    function handleLastNameChange(e) {
+        setFormvalue((prev) => ({
+            ...prev,
+            "lastName": {
+                ...prev["lastName"],
+                value: e.target.value
+            },
+        }));
+    }
+
+    function handleMobileNumberChange(e) {
+        setFormvalue((prev) => ({
+            ...prev,
+            "mobileNumber": {
+                ...prev["mobileNumber"],
+                value: e.target.value
+            },
+        }));
+    }
+
+    function handleEMailChange(e) {
+        setFormvalue((prev) => ({
+            ...prev,
+            "eMail": {
+                ...prev["eMail"],
+                value: e.target.value
+            },
+        }));
     }
 
     function handleClose() {
-        handleDialogState(false);
+        handleDialogClose();
     }
 
-    return { formValue, handleChange, handleSubmission, handleClose };
+    return { formValue, handleFirstNameChange, handleLastNameChange, handleMobileNumberChange, handleEMailChange, handleSubmit, handleClose };
 }

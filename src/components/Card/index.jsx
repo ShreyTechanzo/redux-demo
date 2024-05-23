@@ -1,65 +1,37 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Stack, Typography } from "@mui/material";
-import { Root } from "./styles";
+import { IconButton, Stack, Typography } from "@mui/material";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useDispatch } from "react-redux";
-import { favContact, removeContact } from "../../store";
-import { useState } from "react";
-import EditForm from "./EditForm";
+import EditContact from "./EditContact";
+import DeleteContact from "./DeleteContact";
+import { useContactCard } from "./vm";
 
 function Card({ name, mobileNumber, eMail, isFav, id }) {
 
-    const dispatch = useDispatch();
-    const [confirm, setConfirm] = useState(false);
-    const [edit, setEdit] = useState(false);
-
-    function handleCloseEdit(bool) {
-        setEdit(bool);
-    }
-
-    const contactDetails = {
-        name,
-        eMail,
-        mobileNumber,
-        id
-    };
+    const { edit, confirm, handleOpenEdit, handleOpenDelete, handleCloseEdit, handleCloseDelete, toggleFavContact } = useContactCard({ id });
 
     return (
-        <Root p={1} direction="row" justifyContent="space-between">
+        <Stack p={1} borderRadius="10px" color="#999" bgcolor="#444" direction="row" justifyContent="space-between">
             <Stack p={1} pl={2} gap={0.5}>
                 <Typography variant="h5" component="p"><Typography color="peru" variant="h5" component="span">Name:</Typography> {name}</Typography>
                 <Typography variant="h5" component="p"><Typography color="peru" variant="h5" component="span">Mobile:</Typography> {mobileNumber}</Typography>
-                <Typography variant="h5" component="p"><Typography color="peru" variant="h5" component="span">E-Mail:</Typography> {eMail}</Typography>
+                <Typography variant="h5" component="p"><Typography color="peru" variant="h5" component="span">E-Mail:</Typography> {eMail ? eMail : " E-mail not provided"}</Typography>
             </Stack>
             <Stack gap={0.5}>
-                <IconButton onClick={() => dispatch(favContact(id))} color="primary" size="medium">
+                <IconButton onClick={toggleFavContact} color="primary" size="medium">
                     {isFav ? <StarIcon fontSize="inherit" /> : <StarBorderIcon fontSize="inherit" />}
                 </IconButton>
-                <IconButton onClick={() => handleCloseEdit(true)} color="success" size="medium">
+                <IconButton onClick={handleOpenEdit} color="success" size="medium">
                     <EditIcon fontSize="inherit" />
                 </IconButton>
-                <IconButton onClick={() => setConfirm(true)} color="error" size="medium">
+                <IconButton onClick={handleOpenDelete} color="error" size="medium">
                     <DeleteIcon fontSize="inherit" />
                 </IconButton>
             </Stack>
-            <EditForm open={edit} closeForm={setEdit} contactDetails={contactDetails} />
-            <Dialog open={confirm}>
-                <DialogTitle>
-                    Are you sure you want to delete {name}?
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        If you delete this Contact you won't be able to restore it!
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setConfirm(false)} variant="outlined" color="success">Cancel</Button>
-                    <Button onClick={() => dispatch(removeContact(id))} variant="outlined" color="error">Delete</Button>
-                </DialogActions>
-            </Dialog>
-        </Root>
+            <EditContact open={edit} onClose={handleCloseEdit} id={id} />
+            <DeleteContact open={confirm} onClose={handleCloseDelete} id={id} />
+        </Stack>
     );
 }
 

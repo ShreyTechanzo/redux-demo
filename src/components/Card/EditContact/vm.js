@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { editContact } from "../../../store";
+import { useSelectedContact } from "../../../store/contact/selector";
 
 const errorState = {
     name: false,
@@ -8,15 +9,31 @@ const errorState = {
     eMail: false,
 }
 
-export function useForm(contactDetails, closeForm) {
-    const [formState, setFormState] = useState(contactDetails);
+export function useForm(userId, onClose) {
+    const { name, id, mobileNumber, eMail } = useSelectedContact(userId);
+
+    const [formState, setFormState] = useState({ name, id, mobileNumber, eMail });
     const [error, setError] = useState(errorState);
     const dispatch = useDispatch();
 
-    function handleChange(e) {
+    function handleNameChange(e) {
         setFormState((prev) => ({
             ...prev,
-            [e.target.id]: e.target.value,
+            "name": e.target.value,
+        }));
+    }
+
+    function handleMobileNumberChange(e) {
+        setFormState((prev) => ({
+            ...prev,
+            "mobileNumber": e.target.value,
+        }));
+    }
+
+    function handleEMailChange(e) {
+        setFormState((prev) => ({
+            ...prev,
+            "eMail": e.target.value,
         }));
     }
 
@@ -42,12 +59,12 @@ export function useForm(contactDetails, closeForm) {
 
         setError(errorState);
 
-        closeForm(false);
+        onClose(false);
     }
 
     function handleClose() {
-        closeForm(false);
+        onClose();
     }
 
-    return { formState, error, handleChange, handleSubmit, handleClose };
+    return { formState, error, handleNameChange, handleMobileNumberChange, handleEMailChange, handleSubmit, handleClose };
 }

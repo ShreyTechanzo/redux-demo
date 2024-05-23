@@ -1,14 +1,13 @@
 import { Stack, Typography } from "@mui/material";
-import { Root } from "./styles";
 import Card from "../../components/Card";
-import { useSelector } from "react-redux";
+import { useFilteredFavContact } from "./vm";
 
 function Favorite() {
-    const contactList = useSelector(state => state.contact.contacts);
-    const favContactList = contactList.filter(contact => contact.isFav);
+
+    const { favContactList } = useFilteredFavContact();
 
     return (
-        <Root flex={1}>
+        <Stack flex={1} bgcolor="#333">
             <Typography my={2} variant="h3" textAlign="center" color="whitesmoke">Favorite</Typography>
             <Stack px={10} gap={5}>
                 {!favContactList.length && <Typography mt={10} variant="h2" textAlign="center" color="GrayText">
@@ -18,7 +17,7 @@ function Favorite() {
                     <Card key={props.id} {...props} />
                 ))}
             </Stack>
-        </Root>
+        </Stack>
     );
 }
 
