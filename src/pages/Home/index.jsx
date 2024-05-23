@@ -4,9 +4,10 @@ import Card from "../../components/Card";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { initContacts } from "../../feature";
+import { initContacts } from "../../store";
+import { v4 as uuid } from "uuid";
 
-const contacts = [{ name: "Shrey Vadaliya", id: Date.now(), eMail: "shray@mail.com", mobileNumber: "8160010763", isFav: true }];
+const contacts = [{ id: uuid(), name: "Shrey Vadaliya", eMail: "shray@mail.com", mobileNumber: "8160010763", isFav: true }];
 
 function Home() {
     const [localStore] = useLocalStorage('contacts', contacts);

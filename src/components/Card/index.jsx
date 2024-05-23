@@ -5,7 +5,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch } from "react-redux";
-import { favContact, removeContact } from "../../feature";
+import { favContact, removeContact } from "../../store";
 import { useState } from "react";
 import EditForm from "./EditForm";
 

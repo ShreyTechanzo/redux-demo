@@ -1,4 +1,4 @@
-import { ADD_CONTACT, EDIT_CONTACT, FAV_CONTACT, INIT_CONTACT, REMOVE_CONTACT } from "./contactTypes"
+import { ADD_CONTACT, EDIT_CONTACT, FAV_CONTACT, INIT_CONTACT, REMOVE_CONTACT } from "./types"
 
 const initialState = {
     contacts: [],

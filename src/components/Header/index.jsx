@@ -1,6 +1,6 @@
 import { Button, Stack, Typography } from "@mui/material";
 import { Link } from "./styles";
-import Modal from "../Modal";
+import Modal from "./Modal";
 import { useState } from "react";
 
 
